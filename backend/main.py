@@ -3,6 +3,7 @@ import asyncio
 from typing import List
 from fastapi import FastAPI, UploadFile, File, Depends, HTTPException, Request
 from fastapi.responses import StreamingResponse
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
@@ -17,11 +18,20 @@ models.Base.metadata.create_all(bind=database.engine)
 # Initialize Rate Limiter
 limiter = Limiter(key_func=get_remote_address)
 app = FastAPI(title="FaceStream ROI Monitor")
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], # In production, replace with specific origins
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 # Simple in-memory buffer for the MJPEG stream
-# In a production app, this would use Redis or a dedicated media server
 latest_processed_frame = None
 frame_lock = asyncio.Lock()
 
@@ -49,7 +59,7 @@ async def ingest_feed(
     # 4. Persist ROI data if detected
     if roi_data:
         db_roi = models.FaceDetection(
-            session_id=uuid.uuid4(), # For demo, we generate a new session or keep one
+            session_id=uuid.uuid4(),
             **roi_data
         )
         db.add(db_roi)
