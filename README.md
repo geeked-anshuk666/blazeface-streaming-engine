@@ -38,7 +38,43 @@ FaceStream is a highly optimized full-stack application that provides real-time 
 
 The architecture explicitly separates the ingestion layer, the inference layer, and the rendering layer.
 
-### 1. Clean Separation of Concerns
+### 1. High-Level System Architecture (HLD)
+
+```mermaid
+graph TB
+    subgraph Client ["Client Layer"]
+        User((End User Webcam))
+    end
+
+    subgraph Frontend ["Frontend Tier (Vercel)"]
+        UI["React + Vite Bento UI"]
+        Telemetry["Telemetry Dashboard"]
+        UI --- Telemetry
+    end
+
+    subgraph Backend ["Backend Tier (Render/Docker)"]
+        FastAPI["FastAPI Streaming Engine"]
+        
+        subgraph Vision ["Vision Processing Service"]
+            Mediapipe["Mediapipe BlazeFace (No-CV)"]
+            Pillow["Pillow (Bounding Box Engine)"]
+        end
+        
+        FastAPI <--> |"Frame Extraction"| Vision
+    end
+
+    subgraph Database ["Persistence Layer"]
+        DB[("Structured ROI Store (PostgreSQL)")]
+    end
+
+    %% System Interactions
+    User --> |"Views Dashboard"| UI
+    UI --> |"GET /feed/stream (MJPEG Video Feed)"| FastAPI
+    UI <--> |"GET /roi (JSON Telemetry Analytics)"| FastAPI
+    Vision --> |"Persists Detected ROI Coordinates"| DB
+```
+
+### 2. Data Flow Sequence
 ```mermaid
 sequenceDiagram
     participant FE as React Frontend
