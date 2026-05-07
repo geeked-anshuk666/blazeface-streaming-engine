@@ -6,7 +6,7 @@ const FEATURES = [
   {
     icon: Scan,
     title: 'Real-Time Detection',
-    body: 'Mediapipe BlazeFace inference at 15+ FPS. Sub-100ms latency on commodity CPU hardware — no GPU required.',
+    body: 'Mediapipe BlazeFace inference at 15+ FPS. Sub-100ms latency on commodity CPU hardware - no GPU required.',
     accent: 'var(--ocean)',
   },
   {
@@ -48,7 +48,7 @@ export default function LandingPage() {
       <section style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center', paddingTop: '80px', paddingBottom: '80px' }}>
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', padding: '8px 20px', borderRadius: '50px', border: '1px solid var(--border-2)', backgroundColor: 'var(--surface-1)', marginBottom: '40px' }}>
           <span className="dot dot-live anim-pulse" />
-          <span style={{ fontSize: '12px', fontWeight: 500, color: 'var(--text-2)' }}>v1.0 — System Operational</span>
+          <span style={{ fontSize: '12px', fontWeight: 500, color: 'var(--text-2)' }}>v1.0 - System Operational</span>
         </div>
 
         <h1 className="font-display" style={{ fontSize: '64px', fontWeight: 'bold', lineHeight: 1.1, marginBottom: '32px' }}>
@@ -58,7 +58,7 @@ export default function LandingPage() {
 
         <p style={{ fontSize: '18px', color: 'var(--text-2)', lineHeight: 1.6, marginBottom: '48px', fontWeight: 300 }}>
           A zero-dependency face detection platform built on Mediapipe inference.
-          No OpenCV. No bloat. Stream, detect, and persist — in real time.
+          No OpenCV. No bloat. Stream, detect, and persist - in real time.
         </p>
 
         <div style={{ display: 'flex', justifyContent: 'center', gap: '24px', marginBottom: '80px' }}>
@@ -115,7 +115,7 @@ export default function LandingPage() {
           <p style={{ fontSize: '14px', color: 'var(--text-2)', lineHeight: 1.6, marginBottom: '32px', fontWeight: 300 }}>
             Webcam frames are captured at the browser, POSTed to a FastAPI endpoint, processed through
             Mediapipe BlazeFace, annotated with bounding boxes, persisted as structured ROI data,
-            and streamed back as an MJPEG feed — all in a single async loop.
+            and streamed back as an MJPEG feed - all in a single async loop.
           </p>
           <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '12px' }}>
             {PIPELINE.map((step, i) => (
