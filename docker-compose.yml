@@ -23,7 +23,7 @@ services:
     environment:
       DATABASE_URL: postgresql://${DB_USER:-postgres}:${DB_PASSWORD:-password}@db:5432/${DB_NAME:-facestream_db}
     ports:
-      - "8000:8000"
+      - "8888:8888"
     volumes:
       - ./backend:/app
 
@@ -34,7 +34,7 @@ services:
     depends_on:
       - backend
     ports:
-      - "5173:80"
+      - "5173:8080"
     volumes:
       - ./frontend:/app
       - /app/node_modules
