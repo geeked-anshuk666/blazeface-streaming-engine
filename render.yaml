@@ -5,7 +5,7 @@ services:
     rootDir: backend
     plan: free
     autoDeploy: true
-    healthCheckPath: /api/v1/feed/ingest # Not ideal but serves as a quick check
+    healthCheckPath: /health
     envVars:
       - key: PORT
         value: 8888
