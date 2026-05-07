@@ -1,4 +1,4 @@
-# 🛡️ BlazeFace Streaming Engine
+# BlazeFace Streaming Engine
 
 > **A high-performance, real-time face detection streaming platform built with zero OpenCV dependencies.**
 
@@ -11,13 +11,13 @@ FaceStream is a highly optimized full-stack application that provides real-time 
 
 ---
 
-## 🔗 Live Demos
+## Live Demos
 - **Frontend (Vercel):** [https://blazeface-streaming-engine.vercel.app](https://blazeface-streaming-engine.vercel.app) *(Placeholder: Update after deployment)*
 - **Backend API (Render):** [https://blazeface-streaming-engine.onrender.com](https://blazeface-streaming-engine.onrender.com) *(Placeholder: Update after deployment)*
 
 ---
 
-## 📑 Table of Contents
+## Table of Contents
 1. [Core Features](#-core-features)
 2. [System Architecture](#-system-architecture)
 3. [Manual Setup & Installation](#-manual-setup--installation)
@@ -26,15 +26,15 @@ FaceStream is a highly optimized full-stack application that provides real-time 
 
 ---
 
-## ⚡ Core Features
-* 🚫 **Zero OpenCV Usage**: Replaces heavy `cv2` pipelines with pure MediaPipe inference and Pillow-based annotation, drastically reducing the container footprint and memory usage.
-* 🎥 **MJPEG Streaming Loop**: An asynchronous FastAPI backend maintains a persistent stream, extracting Region of Interest (ROI) bounding boxes continuously at 15+ FPS on standard CPU hardware.
-* 📊 **SOC Dashboard**: A royal, glassmorphism-inspired React dashboard featuring live telemetry, SVG confidence gauges, and structural event logging.
-* 🔒 **Hardened Pipeline**: Includes strict payload limits (2MB max per frame), rate limiting, and CORS security out of the box.
+## Core Features
+* **Zero OpenCV Usage**: Replaces heavy `cv2` pipelines with pure MediaPipe inference and Pillow-based annotation, drastically reducing the container footprint and memory usage.
+* **MJPEG Streaming Loop**: An asynchronous FastAPI backend maintains a persistent stream, extracting Region of Interest (ROI) bounding boxes continuously at 15+ FPS on standard CPU hardware.
+* **SOC Dashboard**: A royal, glassmorphism-inspired React dashboard featuring live telemetry, SVG confidence gauges, and structural event logging.
+* **Hardened Pipeline**: Includes strict payload limits (2MB max per frame), rate limiting, and CORS security out of the box.
 
 ---
 
-## 🏗️ System Architecture
+## System Architecture
 
 The architecture explicitly separates the ingestion layer, the inference layer, and the rendering layer.
 
@@ -82,7 +82,7 @@ The vision processing layer explicitly uses **Mediapipe BlazeFace** for CPU-effi
 
 ---
 
-## 💻 Manual Setup & Installation
+## Manual Setup & Installation
 
 Want to run the SOC monitor locally without Docker? Follow these manual setup steps.
 
@@ -123,7 +123,7 @@ npm run dev
 
 ---
 
-## ☁️ Deployment (Split Architecture)
+## Deployment (Split Architecture)
 
 FaceStream is designed for a split-deployment model to ensure the streaming backend isn't killed by serverless timeouts.
 
@@ -142,5 +142,5 @@ The FastAPI backend requires persistent infrastructure to keep the MJPEG WebSock
 
 ---
 
-## ⚖️ License
+## License
 MIT
