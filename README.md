@@ -12,8 +12,12 @@ FaceStream is a highly optimized full-stack application that provides real-time 
 ---
 
 ## Live Demos
-- **Frontend (Vercel):** [https://blazeface-streaming-engine.vercel.app](https://blazeface-streaming-engine.vercel.app) *(Placeholder: Update after deployment)*
-- **Backend API (Render):** [https://blazeface-streaming-engine.onrender.com](https://blazeface-streaming-engine.onrender.com) *(Placeholder: Update after deployment)*
+
+> ⚠️ **Important:** The backend is deployed on a free Render instance which spins down after inactivity. **You must first open the backend URL** and wait for about a minute for the server to wake up and start. Only then access the frontend.
+
+- **Frontend (Vercel):** [https://blazeface-streaming-engine-dh9wbsgc3-anshuk-jirlis-projects.vercel.app/](https://blazeface-streaming-engine-dh9wbsgc3-anshuk-jirlis-projects.vercel.app/)
+- **Backend API (Render):** [https://facestream-backend.onrender.com/](https://facestream-backend.onrender.com/)
+- **Swagger API Docs:** [https://facestream-backend.onrender.com/docs](https://facestream-backend.onrender.com/docs)
 
 ---
 
