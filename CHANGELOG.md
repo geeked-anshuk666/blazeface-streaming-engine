@@ -7,6 +7,8 @@ All notable changes to the Real-Time Face Detection Video Streaming System will 
 - `frontend/src/pages/Dashboard.jsx` with real-time SVG confidence gauge, event logs, and pipeline telemetry UI.
 - `frontend/src/pages/LandingPage.jsx` with glassmorphism UI, metrics grid, and system architecture visualization.
 - `backend/download_model.py` helper script to automatically fetch the Mediapipe BlazeFace TF Lite model.
+- `frontend/vercel.json` added to support React Router client-side routing on Vercel deployments.
+- `render.yaml` infrastructure-as-code blueprint added for zero-config Docker backend deployments on Render.
 - CORS middleware in `backend/main.py` allowing cross-origin requests from the frontend dev server.
 - `frontend/index.html` configured with Cormorant and Montserrat font families for a premium SOC aesthetic.
 

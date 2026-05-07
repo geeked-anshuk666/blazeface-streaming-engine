@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: facestream-backend
+    env: docker
+    rootDir: backend
+    plan: free
+    autoDeploy: true
+    healthCheckPath: /api/v1/feed/ingest # Not ideal but serves as a quick check
+    envVars:
+      - key: PORT
+        value: 8888
