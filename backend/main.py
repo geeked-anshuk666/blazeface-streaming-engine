@@ -9,8 +9,10 @@ from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 
-from . import models, schemas, database
-from .services.vision import vision_service
+import models
+import schemas
+import database
+from services.vision import vision_service
 
 # Initialize Database
 models.Base.metadata.create_all(bind=database.engine)
@@ -33,47 +35,62 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 # Simple in-memory buffer for the MJPEG stream
 latest_processed_frame = None
+last_frame_time = 0
 frame_lock = asyncio.Lock()
 
 @app.post("/api/v1/feed/ingest", status_code=202)
-@limiter.limit("60/minute")
 async def ingest_feed(
     request: Request,
     file: UploadFile = File(...),
     db: Session = Depends(database.get_db)
 ):
-    global latest_processed_frame
+    global latest_processed_frame, last_frame_time
     
-    # 1. Byte-size limit (2MB)
     contents = await file.read()
     if len(contents) > 2 * 1024 * 1024:
-        raise HTTPException(status_code=413, detail="Payload too large (Max 2MB)")
+        raise HTTPException(status_code=413, detail="Payload too large")
     
-    # 2. Process frame
+    # Process frame
     processed_bytes, roi_data = vision_service.process_frame(contents)
     
-    # 3. Update stream buffer
+    # Update stream buffer and signal
     async with frame_lock:
         latest_processed_frame = processed_bytes
+        last_frame_time = asyncio.get_event_loop().time()
     
-    # 4. Persist ROI data if detected
+    # Persist ROI data asynchronously (non-blocking)
     if roi_data:
+        asyncio.create_task(persist_roi(roi_data))
+    
+    return {"status": "accepted", "face_detected": roi_data is not None}
+
+async def persist_roi(roi_data: dict):
+    # Use a fresh session for background persistence
+    try:
+        db = next(database.get_db())
         db_roi = models.FaceDetection(
-            session_id=uuid.uuid4(),
+            session_id=str(uuid.uuid4()),
             **roi_data
         )
         db.add(db_roi)
         db.commit()
-    
-    return {"status": "accepted", "face_detected": roi_data is not None}
+        db.close()
+    except Exception as e:
+        print(f"ERROR persisting ROI: {e}")
 
 async def generate_mjpeg():
+    local_last_time = 0
     while True:
-        async with frame_lock:
-            if latest_processed_frame:
+        if last_frame_time > local_last_time:
+            async with frame_lock:
+                frame = latest_processed_frame
+                local_last_time = last_frame_time
+            
+            if frame:
                 yield (b'--frame\r\n'
-                       b'Content-Type: image/jpeg\r\n\r\n' + latest_processed_frame + b'\r\n')
-        await asyncio.sleep(0.03) # ~30 FPS
+                       b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+        
+        await asyncio.sleep(0.01) # Poll for new frames at 100Hz
 
 @app.get("/api/v1/feed/stream")
 async def stream_feed():
@@ -83,7 +100,6 @@ async def stream_feed():
     )
 
 @app.get("/api/v1/roi", response_model=List[schemas.ROIRead])
-@limiter.limit("30/minute")
 async def get_roi_data(
     request: Request,
     limit: int = 100,

@@ -11,12 +11,12 @@ class ROIBase(BaseModel):
     confidence: Optional[float] = None
 
 class ROIRead(ROIBase):
-    id: UUID
-    session_id: UUID
+    id: str
+    session_id: str
     timestamp: datetime
 
     model_config = ConfigDict(from_attributes=True)
 
 class SessionMetadata(BaseModel):
-    session_id: UUID
+    session_id: str
     frame_count: int

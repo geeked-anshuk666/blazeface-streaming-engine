@@ -1,14 +1,13 @@
 import uuid
 from sqlalchemy import Column, Float, String, DateTime, Index
-from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql import func
-from .database import Base
+from database import Base
 
 class FaceDetection(Base):
     __tablename__ = "face_detections"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    session_id = Column(UUID(as_uuid=True), nullable=False, index=True)
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    session_id = Column(String(36), nullable=False, index=True)
     timestamp = Column(DateTime(timezone=True), server_default=func.now(), index=True)
     
     # Bounding box coordinates (Normalized 0.0 - 1.0)

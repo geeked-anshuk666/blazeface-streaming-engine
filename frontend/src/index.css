@@ -1,24 +1,267 @@
 @import "tailwindcss";
 
+/*
+ * FACESTREAM DESIGN SYSTEM v4 — HYBRID ARCHITECTURE
+ * - Landing: Glassmorphism, airy typography, soft contrast
+ * - Dashboard: Strict Bento Box, zero-overlap, compartmentalized
+ */
+
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
+  /* ── Raw Palette ──────────────────────── */
+  --charcoal:       #565554;
+  --ocean:          #2e86ab;
+  --vanilla:        #f6f5ae;
+  --canary:         #f5f749;
+  --cinnabar:       #f24236;
+
+  /* ── Derived Surfaces ─────────────────── */
+  --surface-0: #0a0a09;          /* Deepest background, almost black for high contrast */
+  --surface-1: #121211;          /* Base layer */
+  --surface-2: rgba(86, 85, 84, 0.15);  /* Glassy charcoal */
+  --surface-3: rgba(86, 85, 84, 0.25);  /* Glassy charcoal hover */
+
+  /* ── Sidebar ──────────────────────────── */
+  --sidebar-bg: rgba(10, 20, 28, 0.6);
+  --sidebar-hover: rgba(46, 134, 171, 0.15);
+  --sidebar-active: rgba(46, 134, 171, 0.25);
+
+  /* ── Borders ──────────────────────────── */
+  --border-1: rgba(246, 245, 174, 0.08); /* Faint vanilla border */
+  --border-2: rgba(246, 245, 174, 0.15); /* Stronger vanilla border */
+  --border-3: rgba(46, 134, 171, 0.3);   /* Ocean blue border */
+
+  /* ── Text ─────────────────────────────── */
+  --text-0: #ffffff;             /* Pure white for max readability on glass */
+  --text-1: #f6f5ae;             /* Vanilla (Primary accents) */
+  --text-2: rgba(246, 245, 174, 0.7); /* Muted Vanilla */
+  --text-3: rgba(246, 245, 174, 0.4); /* Faint Vanilla */
+
+  /* ── Typography ───────────────────────── */
+  font-family: 'Montserrat', system-ui, -apple-system, sans-serif;
+  line-height: 1.6;
   font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #0f172a; /* Slate 900 for SOC Dashboard base */
-
+  color-scheme: dark;
+  color: var(--text-0);
+  background-color: var(--surface-0);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-body {
-  margin: 0;
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { min-width: 320px; min-height: 100vh; overflow-x: hidden; }
+
+.font-display { font-family: 'Cormorant', Georgia, serif; }
+
+/* ═══════════════════════════════════════════
+   SCROLLBAR
+   ═══════════════════════════════════════════ */
+.scroll-thin::-webkit-scrollbar { width: 4px; }
+.scroll-thin::-webkit-scrollbar-track { background: transparent; }
+.scroll-thin::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 99px; }
+.scroll-thin::-webkit-scrollbar-thumb:hover { background: var(--text-2); }
+
+/* ═══════════════════════════════════════════
+   CARD ARCHITECTURES
+   ═══════════════════════════════════════════ */
+
+/* Glass Card for Landing Page */
+.glass-card {
+  background: var(--surface-2);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-1);
+  border-radius: 24px;
+  transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.glass-card:hover {
+  background: var(--surface-3);
+  border-color: var(--border-2);
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+
+/* Bento Card for Dashboard */
+.bento-card {
+  background: var(--surface-1);
+  border: 1px solid var(--border-1);
+  border-radius: 16px;
   display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  flex-direction: column;
+  overflow: hidden; /* Prevent child overlap */
+}
+
+/* Bento Inner Sub-card */
+.bento-inner {
+  background: var(--surface-0);
+  border: 1px solid var(--border-1);
+  border-radius: 12px;
+}
+
+/* ═══════════════════════════════════════════
+   SIDEBAR (Glassy)
+   ═══════════════════════════════════════════ */
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-2);
+  cursor: pointer;
+  transition: all 200ms ease;
+}
+.sidebar-link:hover {
+  color: var(--text-0);
+  background: var(--sidebar-hover);
+}
+.sidebar-link.active {
+  color: var(--text-1);
+  background: var(--sidebar-active);
+  font-weight: 600;
+  border: 1px solid var(--border-3);
+}
+
+/* ═══════════════════════════════════════════
+   STATUS DOTS
+   ═══════════════════════════════════════════ */
+.dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.dot-live { background: var(--ocean); box-shadow: 0 0 12px var(--ocean); }
+.dot-off  { background: var(--cinnabar); box-shadow: 0 0 8px rgba(242,66,54,0.5); }
+
+/* ═══════════════════════════════════════════
+   ANIMATIONS
+   ═══════════════════════════════════════════ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.4; }
+}
+.anim-fade-up { animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.anim-pulse   { animation: pulse-soft 2s ease-in-out infinite; }
+
+/* ═══════════════════════════════════════════
+   STAT CELLS
+   ═══════════════════════════════════════════ */
+.stat-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-2);
+}
+.stat-value {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-0);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ═══════════════════════════════════════════
+   LANDING HERO BG
+   ═══════════════════════════════════════════ */
+.hero-glow-bg {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: 
+    radial-gradient(circle at 15% 50%, rgba(46, 134, 171, 0.08), transparent 50%),
+    radial-gradient(circle at 85% 30%, rgba(246, 245, 174, 0.05), transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ═══════════════════════════════════════════
+   BUTTONS — Sleek & Refined
+   ═══════════════════════════════════════════ */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px 36px;
+  background: var(--canary);
+  color: var(--charcoal);
+  font-weight: 700;
+  font-size: 15px;
+  border-radius: 99px; /* Pill shape for sleekness */
+  border: none;
+  cursor: pointer;
+  transition: all 200ms ease;
+  text-decoration: none;
+}
+.btn-primary:hover {
+  background: var(--vanilla);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(245, 247, 73, 0.25);
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px 36px;
+  background: rgba(255,255,255,0.02);
+  backdrop-filter: blur(8px);
+  color: var(--text-0);
+  font-weight: 500;
+  font-size: 15px;
+  border-radius: 99px;
+  border: 1px solid var(--border-2);
+  cursor: pointer;
+  transition: all 200ms ease;
+  text-decoration: none;
+}
+.btn-ghost:hover {
+  border-color: var(--ocean);
+  background: rgba(46, 134, 171, 0.1);
+}
+
+/* Dashboard Controls */
+.btn-control {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid;
+  transition: all 200ms ease;
+}
+.btn-control.start {
+  background: rgba(46,134,171, 0.1);
+  color: var(--ocean);
+  border-color: rgba(46,134,171, 0.4);
+}
+.btn-control.start:hover { background: rgba(46,134,171, 0.2); }
+.btn-control.stop {
+  background: rgba(242,66,54, 0.1);
+  color: var(--cinnabar);
+  border-color: rgba(242,66,54, 0.4);
+}
+.btn-control.stop:hover { background: rgba(242,66,54, 0.2); }
+
+/* ═══════════════════════════════════════════
+   BAR CHARTS
+   ═══════════════════════════════════════════ */
+.bar-track {
+  height: 6px;
+  background: var(--surface-0);
+  border-radius: 99px;
+  overflow: hidden;
+  border: 1px solid var(--border-1);
+}
+.bar-fill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 600ms cubic-bezier(0.16, 1, 0.3, 1);
 }

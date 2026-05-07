@@ -10,7 +10,7 @@ class VisionService:
         # Initialize Mediapipe Face Detection
         self.mp_face_detection = mp.solutions.face_detection
         self.face_detection = self.mp_face_detection.FaceDetection(
-            model_selection=0, # 0 for short-range, 1 for long-range
+            model_selection=0,  # 0 for short-range, 1 for long-range
             min_detection_confidence=0.5
         )
 
